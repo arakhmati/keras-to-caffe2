@@ -30,7 +30,7 @@ python test_conv.py
 * Softmax
 
 ## Known Limitations
-* Only convolutional 2D neural networks are supported
+* Only 2D convolutional neural networks are supported
 * There is no BatchNormalization layer for dense networks
 * Conv2D and MaxPool2D layers must have 'channel_first' data format
 * Conv2D layers cannot be padded
