@@ -1,5 +1,5 @@
 # Keras to Caffe2 Converter
-[Caffe2](https://github.com/caffe2/caffe2) is currently one of the fastest deep learning libraries available on both Android and iOS. However, a lot of researches and engineers use [Keras](https://github.com/fchollet/keras) to train their models.
+[Caffe2](https://github.com/caffe2/caffe2) is currently the fastest deep learning library available on Android and iOS. However, a lot of researches and engineers use [Keras](https://github.com/fchollet/keras) to train their models.
 This tool combines the best of both worlds, as it allows the models trained in Keras to be converted into Caffe2 models and consequently deployed on Android and/or iOS devices.
 
 ### Prerequisites
