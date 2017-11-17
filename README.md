@@ -5,7 +5,7 @@ This tool combines the best of both worlds, as it allows the models to be traine
 
 ### Prerequisites
 * [Numpy](https://github.com/numpy/numpy)  <br />
-* [Keras](https://github.com/fchollet/keras) (Tested with Tensroflow backend only)  <br />
+* [Keras](https://github.com/fchollet/keras) <br />
 * [Caffe2](https://github.com/caffe2/caffe2)  <br />
 ### Installing
 Clone the repository and install it as a python module:
