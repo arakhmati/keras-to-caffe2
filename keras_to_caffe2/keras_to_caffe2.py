@@ -148,7 +148,7 @@ def keras_to_caffe2(keras_model):
     input_shape = list(keras_model.layers[0].get_config()['batch_input_shape'])
     input_shape[0] = 1
     
-    np_data = np.random.random_sample(input_shape).astype(np.float32)
+    np_data = np.zeros(input_shape, dtype=np.float32)
     workspace.FeedBlob('in', np_data)
 
     workspace.RunNetOnce(caffe2_model.param_init_net)
