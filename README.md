@@ -4,9 +4,9 @@ However, a lot of researches and engineers use keras to train their models.
 This tool combines the best of both worlds, as it allows the models to be trained in Keras and consequently deployed on Android and iOS by converting them to Caffe2.
 
 ### Prerequisites
-[Numpy](https://github.com/numpy/numpy)
-[Keras](https://github.com/fchollet/keras) (Tested with Tensroflow backend only)
-[Caffe2](https://github.com/caffe2/caffe2)
+* [Numpy](https://github.com/numpy/numpy)  <br />
+* [Keras](https://github.com/fchollet/keras) (Tested with Tensroflow backend only)  <br />
+* [Caffe2](https://github.com/caffe2/caffe2)  <br />
 ### Installing
 Clone the repository and install it as a python module:
 ```
