@@ -51,7 +51,7 @@ def copy_model(keras_model):
             prev_shape[1] =  prev_shape[2] = int((shape[2] - kernel) / stride) + 1
             prev_name = name
             
-        if isinstance(keras_layer, keras.layers.BatchNormalization):
+        elif isinstance(keras_layer, keras.layers.BatchNormalization):
             if not isinstance(shape, list):
                 continue
             dim_in = shape[0]
@@ -65,7 +65,7 @@ def copy_model(keras_model):
                             momentum=momentum,
                             is_test=True)
             
-        if isinstance(keras_layer, keras.layers.MaxPooling2D):
+        elif isinstance(keras_layer, keras.layers.MaxPooling2D):
             
             name = config['name']
             kernel = config['pool_size'][0]
@@ -78,10 +78,10 @@ def copy_model(keras_model):
             prev_shape[1] =  prev_shape[2] = int((shape[2] - kernel) / stride) + 1
             prev_name = name
             
-        if isinstance(keras_layer, keras.layers.Flatten):
+        elif isinstance(keras_layer, keras.layers.Flatten):
             prev_shape = shape[0] * shape[1] * shape[2]
             
-        if isinstance(keras_layer, keras.layers.Dense):     
+        elif isinstance(keras_layer, keras.layers.Dense):     
             name = config['name']           
             dim_in = shape
             dim_out = config['units']
@@ -115,7 +115,7 @@ def copy_weights(keras_model):
             workspace.FeedBlob(name + '_w', w)
             workspace.FeedBlob(name + '_b', b)
             
-        if isinstance(keras_layer, keras.layers.Dense):     
+        elif isinstance(keras_layer, keras.layers.Dense):     
             w = keras_layer.get_weights()[0].transpose()
             b = keras_layer.get_weights()[1]
             workspace.FeedBlob(name + '_w', w)
