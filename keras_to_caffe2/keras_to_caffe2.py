@@ -10,7 +10,6 @@ def copy_model(keras_model):
     arg_scope = {'order': 'NCHW'}
     caffe2_model = model_helper.ModelHelper(name='model', arg_scope=arg_scope)
     
-    
     prev_name = 'in'
     prev_shape = None
     
@@ -43,6 +42,7 @@ def copy_model(keras_model):
                       dim_out=dim_out,
                       kernel=kernel,
                       stride=stride)
+            
             if config['activation'] != 'relu':
                 raise ValueError('The only supported activation for conv layer is relu')
             brew.relu(caffe2_model, name, name)
@@ -105,44 +105,26 @@ def copy_model(keras_model):
     return caffe2_model
 
 def copy_weights(keras_model):
+    
     for keras_layer in keras_model.layers:
         
-        config = keras_layer.get_config()   
-        name = config['name']        
-        
-        if 'data_format' in config:
-            if config['data_format'] != 'channels_first':
-                raise ValueError('The only supported data_format is channels_first')
+        name = keras_layer.get_config()['name']   
 
-        
         if isinstance(keras_layer, keras.layers.Conv2D):            
             w = keras_layer.get_weights()[0].transpose((3, 2, 0, 1))
             b = keras_layer.get_weights()[1]
-#            print(w.shape, b.shape)
-#            print(workspace.FetchBlob(name + '_w').shape, workspace.FetchBlob(name + '_b').shape)
             workspace.FeedBlob(name + '_w', w)
             workspace.FeedBlob(name + '_b', b)
-            
-        if isinstance(keras_layer, keras.layers.BatchNormalization):
-            pass
-            
-        if isinstance(keras_layer, keras.layers.MaxPooling2D):
-            pass
-            
-        if isinstance(keras_layer, keras.layers.Flatten):
-            pass
             
         if isinstance(keras_layer, keras.layers.Dense):     
             w = keras_layer.get_weights()[0].transpose()
             b = keras_layer.get_weights()[1]
-#            print(w.shape, b.shape)
-#            print(workspace.FetchBlob(name + '_w').shape, workspace.FetchBlob(name + '_b').shape)
             workspace.FeedBlob(name + '_w', w)
             workspace.FeedBlob(name + '_b', b)
-#        print('\n')
         
 
 def keras_to_caffe2(keras_model):
+    
     caffe2_model = copy_model(keras_model)
     
     input_shape = list(keras_model.layers[0].get_config()['batch_input_shape'])
@@ -155,4 +137,5 @@ def keras_to_caffe2(keras_model):
     workspace.CreateNet(caffe2_model.net)
     
     copy_weights(keras_model)
+    
     return caffe2_model
