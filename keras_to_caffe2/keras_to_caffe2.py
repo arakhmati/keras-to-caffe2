@@ -26,7 +26,6 @@ def copy_model(keras_model):
             shape = shape[1:]
         else:
             shape = prev_shape
-#        print(config['name'])
         
         if isinstance(keras_layer, keras.layers.Conv2D):
             name = config['name']
