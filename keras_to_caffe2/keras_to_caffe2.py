@@ -54,16 +54,18 @@ def copy_model(keras_model):
         elif isinstance(keras_layer, keras.layers.BatchNormalization):
             if not isinstance(shape, list):
                 continue
+            name = config['name']
             dim_in = shape[0]
             epsilon = config['epsilon']
             momentum = config['momentum']
             brew.spatial_bn(caffe2_model,
                             prev_name,
-                            prev_name, 
+                            name, 
                             dim_in=dim_in, 
                             epsilon=epsilon, 
                             momentum=momentum,
                             is_test=True)
+            prev_name = name
             
         elif isinstance(keras_layer, keras.layers.MaxPooling2D):
             
@@ -107,13 +109,25 @@ def copy_weights(keras_model):
     
     for keras_layer in keras_model.layers:
         
-        name = keras_layer.get_config()['name']   
+        name = keras_layer.get_config()['name']  
 
         if isinstance(keras_layer, keras.layers.Conv2D):            
             w = keras_layer.get_weights()[0].transpose((3, 2, 0, 1))
             b = keras_layer.get_weights()[1]
             workspace.FeedBlob(name + '_w', w)
             workspace.FeedBlob(name + '_b', b)
+            
+        elif isinstance(keras_layer, keras.layers.BatchNormalization):
+            
+            s = keras_layer.get_weights()[0]
+            b = keras_layer.get_weights()[1]
+            rm = keras_layer.get_weights()[2]
+            riv = keras_layer.get_weights()[3]
+            
+            workspace.FeedBlob(name + '_s', s)
+            workspace.FeedBlob(name + '_b', b)
+            workspace.FeedBlob(name + '_rm', rm)
+            workspace.FeedBlob(name + '_riv', riv)
             
         elif isinstance(keras_layer, keras.layers.Dense):     
             w = keras_layer.get_weights()[0].transpose()
