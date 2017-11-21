@@ -1,7 +1,10 @@
 import numpy as np
+
 from keras.models import Sequential
 from keras.layers import Conv2D, MaxPooling2D, Dense, Flatten, Dropout, BatchNormalization
+
 from caffe2.python import workspace
+from caffe2.python.predictor import mobile_exporter
 
 import keras_to_caffe2
 
@@ -50,7 +53,23 @@ if __name__ == '__main__':
     workspace.RunNet(caffe2_model.net)
     caffe2_pred = workspace.FetchBlob('softmax')[0]
     
-    # Compare Predictions
-    print(keras_pred.tolist())
-    print(caffe2_pred.tolist())
-    print('%d == %d' % (np.argmax(keras_pred), np.argmax(caffe2_pred)))
+    # Print last layer of both models
+    def print_array(array):
+        for x in array:
+            print('%e' % (x), end =' ')
+        print()
+    print_array(keras_pred)
+    print_array(caffe2_pred)
+    
+    # Did the labels match?
+    keras_label = np.argmax(keras_pred)
+    caffe2_label = np.argmax(caffe2_pred)
+    match = keras_label == caffe2_label
+    print('%d %s %d' % (keras_label, '==' if match else '!=', caffe2_label))
+
+    # Export caffe2 to Android
+    init_net, predict_net = mobile_exporter.Export(workspace, caffe2_model.net, caffe2_model.params)
+    with open('init_net.pb', 'wb') as f:
+        f.write(init_net.SerializeToString())
+    with open('predict_net.pb', 'wb') as f:
+        f.write(predict_net.SerializeToString())
