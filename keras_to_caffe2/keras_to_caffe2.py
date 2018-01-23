@@ -91,10 +91,13 @@ def copy_model(keras_model):
                     dim_in=dim_in,
                     dim_out=dim_out)
             
-            if config['activation'] == 'relu':
+            activation = config['activation']
+            if activation == 'relu':
                 brew.relu(caffe2_model, name, name)
-            elif config['activation'] == 'softmax':
-                brew.softmax(caffe2_model, name, 'softmax')
+            elif activation == 'softmax':
+                brew.softmax(caffe2_model, name, name)
+            elif activation == 'linear':
+                pass # Don't need to apply anything
             else:
                 raise ValueError('The only supported activations for fc layer are relu and softmax')
             prev_shape = dim_out
