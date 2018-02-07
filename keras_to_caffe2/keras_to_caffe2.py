@@ -95,7 +95,7 @@ def copy_model(keras_model):
             if activation == 'relu':
                 brew.relu(caffe2_model, name, name)
             elif activation == 'softmax':
-                brew.softmax(caffe2_model, name, 'softmax')
+                brew.softmax(caffe2_model, name, '__softmax__')
             elif activation == 'linear':
                 pass # Don't need to apply anything
             else:
